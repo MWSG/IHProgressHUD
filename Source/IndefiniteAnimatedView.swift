@@ -184,14 +184,14 @@ extension IndefiniteAnimatedView {
     }
     
     private func loadImageBundle(named imageName:String) -> UIImage? {
-        var imageBundle = Bundle.init(for: IndefiniteAnimatedView.self)
-        if let resourcePath = Bundle.module.path(forResource: "IHProgressHUD", ofType: "bundle") {
-            if let resourcesBundle = Bundle(path: resourcePath) {
-                imageBundle = resourcesBundle
-            }
-        }
-        
-        return (UIImage(named: imageName, in: imageBundle, compatibleWith: nil))
+      #if SWIFT_PACKAGE
+      if let path = Bundle.module.path(forResource: "IHProgressHUD", ofType: "bundle") {
+        return UIImage(named: imageName, in: Bundle(path: path), compatibleWith: nil)
+      }
+      return nil
+      #else
+      return UIImage(named: imageName, in: Bundle(for: IndefiniteAnimatedView.self), compatibleWith: nil)
+      #endif
     }
 }
 
